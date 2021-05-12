@@ -1,6 +1,7 @@
 ﻿using EntitiesDataLayer.Abstract;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -19,6 +20,8 @@ namespace EntitiesDataLayer
             Orders = new List<OrderEntity>();
         }
         public ICollection<OrderEntity> Orders { get; set; }
+        [Required]
+        public AccountEntity Account { get; set; }
 
     }
 }

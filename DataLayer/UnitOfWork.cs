@@ -13,9 +13,19 @@ namespace DataLayer
         private IOrderRepository orderRepository;
         private IOrderElemetRepository orderElemetRepository;
         private IProductRepository productRepository;
+        private IAccountRepository accountRepository;
         public UnitOfWork(Context appContext)
         {
             this.appContext = appContext;
+        }
+        public IAccountRepository Account
+        {
+            get
+            {
+                if (accountRepository == null)
+                    accountRepository = new AccountRepository(appContext);
+                return accountRepository;
+            }
         }
         public ICustomerRepository Customer
         {

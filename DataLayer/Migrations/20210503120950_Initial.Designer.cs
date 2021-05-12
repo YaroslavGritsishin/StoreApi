@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210412232244_Initial")]
+    [Migration("20210503120950_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,32 @@ namespace DataLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("EntitiesDataLayer.AccountEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
+
+                    b.ToTable("Accounts");
+                });
 
             modelBuilder.Entity("EntitiesDataLayer.CustomerEntity", b =>
                 {
@@ -109,6 +135,9 @@ namespace DataLayer.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImgPath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -133,6 +162,17 @@ namespace DataLayer.Migrations
                     b.HasIndex("OrdersId");
 
                     b.ToTable("OrderElementEntityOrderEntity");
+                });
+
+            modelBuilder.Entity("EntitiesDataLayer.AccountEntity", b =>
+                {
+                    b.HasOne("EntitiesDataLayer.CustomerEntity", "Customer")
+                        .WithOne("Account")
+                        .HasForeignKey("EntitiesDataLayer.AccountEntity", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("EntitiesDataLayer.OrderElementEntity", b =>
@@ -174,6 +214,9 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("EntitiesDataLayer.CustomerEntity", b =>
                 {
+                    b.Navigation("Account")
+                        .IsRequired();
+
                     b.Navigation("Orders");
                 });
 
